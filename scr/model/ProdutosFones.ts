@@ -44,18 +44,6 @@ export class ProdutosFones extends Produtos
         this._tipo = tipo;
     }
 
-    // public sacar(valor: number): boolean 
-    // {
-    //     if ((this.saldo + this._limite) < valor) 
-    //     {
-    //         console.log("\n Saldo Insuficiente!");
-    //         return false;
-    //     }
-
-    //     this.saldo = this.saldo - valor;
-    //     return true;
-    // }
-
     public visualizar(): void
     {
         super.visualizar();
