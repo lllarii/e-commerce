@@ -9,7 +9,4 @@ export interface ProdutosRepository
 	atualizar(conta: Produtos): void;
 	deletar(numero: number): void;
 	
-	// Métodos E-commerce
-	// comprar(numero: number, valor: number): void;
-	// favoritar(numero: number, valor: number): void;	
 }

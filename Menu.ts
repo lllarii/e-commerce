@@ -27,9 +27,6 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
         console.log("            3 - Buscar produto por número            ");
         console.log("            4 - Atualizar produto cadastrado         ");
         console.log("            5 - Apagar produto cadastrado            ");
-        // console.log("            6 - Sacar                                ");
-        // console.log("            7 - Depositar                            ");
-        // console.log("            8 - Transferir valores entre Contas      ");
         console.log("            0 - Sair                                 ");
         console.log("                                                     ");
         console.log("-----------------------------------------------------");
@@ -240,51 +237,6 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
                 keyPress();
                 break;
                 
-            // case 6:
-            //     console.log(colors.fg.whitestrong,
-            //         "\n\nSaque\n\n", colors.reset);
-
-            //     console.log("Digite o número da conta: ");
-            //     numero = readlinesync.questionInt("");
-
-            //     console.log("\nDigite o valor do saque (R$): ");
-            //     valor = readlinesync.questionFloat("");
-
-            //     contas.sacar(numero, valor);
-
-            //     keyPress();
-            //     break;
-            // case 7:
-            //     console.log(colors.fg.whitestrong,
-            //         "\n\nDepósito\n\n", colors.reset);
-                
-            //     console.log("Digite o número da conta: ");
-            //     numero = readlinesync.questionInt("");
-
-            //     console.log("\nDigite o valor do depósito (R$): ");
-            //     valor = readlinesync.questionFloat("");
-
-            //     contas.depositar(numero, valor);
-
-            //     keyPress();
-            //     break;
-            // case 8:
-            //     console.log(colors.fg.whitestrong,
-            //         "\n\nTransferência entre Contas\n\n", colors.reset);
-
-            //     console.log("Digite o número da conta de origem: ");
-            //     numero = readlinesync.questionInt("");
-
-            //     console.log("Digite o número da conta de destino: ");
-            //     numeroDestino = readlinesync.questionInt("");
-
-            //     console.log("\n Digite o valor do depósito (R$): ");
-            //     valor = readlinesync.questionFloat("");
-
-            //     contas.transferir(numero, numeroDestino, valor);
-                
-            //     keyPress();
-            //     break;
             default:
                 console.log("\nDigite uma opção existente!\n");
                 keyPress();

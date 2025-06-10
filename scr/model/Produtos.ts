@@ -75,21 +75,6 @@ export abstract class Produtos {
         this._estoque = estoque;
     }
 
-    // public sacar(valor: number): boolean {
-
-    //     if (this._saldo < valor) {
-    //         console.log("\n Saldo Insuficiente!");
-    //         return false;
-    //     }
-
-    //     this._saldo = this._saldo - valor;
-    //     return true;
-    // }
-
-    // public depositar(valor: number): void {
-    //     this._saldo = this._saldo + valor;
-    // }
-
     public visualizar(): void 
     {
 

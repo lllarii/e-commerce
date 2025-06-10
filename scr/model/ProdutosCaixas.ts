@@ -20,18 +20,6 @@ export class ProdutosCaixas extends Produtos
         this._tamanho = tamanho;
     }
 
-    // public sacar(valor: number): boolean 
-    // {
-    //     if ((this.saldo + this._limite) < valor) 
-    //     {
-    //         console.log("\n Saldo Insuficiente!");
-    //         return false;
-    //     }
-
-    //     this.saldo = this.saldo - valor;
-    //     return true;
-    // }
-
     public visualizar(): void
     {
         super.visualizar();
