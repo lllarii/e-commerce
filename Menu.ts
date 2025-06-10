@@ -7,7 +7,7 @@ export function main ()
 {
 let menu, numero, categoria, cor, preco, estoque, tipo, tamanho: number;
 let nome, descricao: string;
-let fio, estojo: boolean;
+let fio, estojo, loop: boolean;
 let produtos: ProdutosController = new ProdutosController();
 const tiposProdutos = ['Fone de Ouvido', 'Caixa de Som'];
 const coresProdutos = ['Preto', 'Branco', 'Verde', 'Roxo', 'Cinza']
@@ -50,45 +50,77 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
         switch (menu) 
         {
             case 1:
-                console.log("\n\nCADASTRO DE PRODUTOS\n\n");
-                
-                console.log("Digite o nome do produto: ");
-                nome = readlinesync.question("");
-
-                console.log("Digite a descrição do produto: ");
-                descricao = readlinesync.question("");
-
-                console.log("Selecione a categoria do produto: ");
-                categoria = readlinesync.keyInSelect(tiposProdutos, "", {cancel: false}) +1;
-
-                console.log("Selecione a cor do produto: ");
-                cor = readlinesync.keyInSelect(coresProdutos, "", {cancel: false}) +1;
-
-                console.log("Digite o preço do produto: ");
-                preco = readlinesync.questionFloat("");
-
-                console.log("Digite a quantidade disponível no estoque: ");
-                estoque = readlinesync.questionInt("");
-
-                switch (categoria)
+                do 
                 {
-                    case 1:
-                        console.log("Selecione o tipo de fone:");
-                        tipo = readlinesync.keyInSelect(tiposFones, "", {cancel: false}) +1;
-                        console.log("O produto tem fio?");
-                        fio = readlinesync.keyInYNStrict("");
-                        console.log("O produto tem estojo?");
-                        estojo = readlinesync.keyInYNStrict("");
-                        produtos.cadastrar(
-                            new ProdutosFones(produtos.gerarNumero(), nome, descricao, categoria, cor, estojo, fio, tipo, preco, estoque));
-                        break;
-                    case 2:
-                        console.log("Selecione o tipo de fone:");
-                        tamanho = readlinesync.keyInSelect(tiposCaixas, "", {cancel: false}) +1;
-                        produtos.cadastrar(
-                            new ProdutosCaixas(produtos.gerarNumero(), nome, descricao, categoria, cor, tamanho, preco, estoque));
-                        break;                      
-                }
+                    console.log("\n\nCADASTRO DE PRODUTOS\n\n");
+                    
+                    try{
+                    console.log("Digite o nome do produto: ");
+                    nome = readlinesync.question("");
+                    validarTexto(nome);
+                    } catch (error) {
+                        console.error("Erro: " + error);
+                        console.log("Por favor, digite um nome com mais de 4 caracteres:");
+                        nome = readlinesync.question("")
+                        try { 
+                        validarTexto(nome);
+                        } catch (novoErro) {
+                            console.log("Ainda inválido. Encerrando...");
+                            return;
+                        }
+                    }
+
+                    try{
+                    console.log("Digite a descrição do produto: ");
+                    descricao = readlinesync.question("");
+                    validarTexto(descricao);
+                    } catch (error) {
+                        console.error("Erro: " + error);
+                        console.log("Por favor, digite uma descrição com mais de 4 caracteres: ");
+                        descricao = readlinesync.question("")
+                        try { 
+                        validarTexto(descricao);
+                        } catch (novoErro) {
+                            console.log("Ainda inválido. Encerrando...");
+                            return;
+                        }
+                    }
+
+                    console.log("Selecione a categoria do produto: ");
+                    categoria = readlinesync.keyInSelect(tiposProdutos, "", {cancel: false}) +1;
+
+                    console.log("Selecione a cor do produto: ");
+                    cor = readlinesync.keyInSelect(coresProdutos, "", {cancel: false}) +1;
+
+                    console.log("Digite o preço do produto: ");
+                    preco = readlinesync.questionFloat("");
+
+                    console.log("Digite a quantidade disponível no estoque: ");
+                    estoque = readlinesync.questionInt("");
+
+                    switch (categoria)
+                    {
+                        case 1:
+                            console.log("Selecione o tipo de fone:");
+                            tipo = readlinesync.keyInSelect(tiposFones, "", {cancel: false}) +1;
+                            console.log("O produto tem fio?");
+                            fio = readlinesync.keyInYNStrict();
+                            console.log("O produto tem estojo?");
+                            estojo = readlinesync.keyInYNStrict();
+                            produtos.cadastrar(
+                                new ProdutosFones(produtos.gerarNumero(), nome, descricao, categoria, cor, estojo, fio, tipo, preco, estoque));
+                            break;
+                        case 2:
+                            console.log("Selecione o tipo de caixa de som:");
+                            tamanho = readlinesync.keyInSelect(tiposCaixas, "", {cancel: false}) +1;
+                            produtos.cadastrar(
+                                new ProdutosCaixas(produtos.gerarNumero(), nome, descricao, categoria, cor, tamanho, preco, estoque));
+                            break;                      
+                    }
+                    console.log ("\nDeseja cadastrar um novo produto?");
+                    loop = readlinesync.keyInYNStrict();
+
+                } while (loop == true)
 
                 keyPress();
                 break;
@@ -99,65 +131,115 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
                 break;
             case 3:
                 console.log("\n\nBUSCAR PRODUTO POR NÚMERO\n\n");
-
-                console.log("Digite o número do produto: ");
-                numero = readlinesync.questionInt("");
-                produtos.procurarPorNumero(numero);
+                do
+                {
+                    console.log("Digite o número do produto: ");
+                    numero = readlinesync.questionInt("");
+                    produtos.procurarPorNumero(numero);
+                    loop = readlinesync.keyInYNStrict()
+                } while (loop == true)
 
                 keyPress();
                 break;
             case 4:
-                console.log("\n\nATUALIZAR PRODUTO CADASTRADO\n\n");
-                    console.log("Digite o número do produto: ")
-                    numero = readlinesync.questionInt("");
-
-                    let produto = produtos.buscarnoArray(numero);
-
-                    if (produto != null)
-                    {
-                    //     console.log("Digite o número da agência: ");
-                    //     agencia = readlinesync.questionInt("");
-
-                    //     console.log("Digite o nome do titular da conta: ");
-                    //     titular = readlinesync.question("");
-
-                    // tipo = conta.tipo;
-
-                    // console.log("Digite o saldo da conta (R$): ");
-                    // saldo = readlinesync.questionFloat("");
-
-                    // switch (tipo)
-                    // {
-                    //     case 1:
-                    //         console.log("Digite o limite da conta (R$): ");
-                    //         limite = readlinesync.questionFloat("");
-                    //         contas.atualizar(
-                    //             new ContaCorrente(numero, agencia, tipo, titular, saldo, limite));
-                    //         break;
-                    // case 2:
-                    //         console.log("Digite o dia do aniversário da conta poupança: ");
-                    //         aniversario = readlinesync.questionInt("");
-                    //         contas.atualizar(
-                    //             new ContaPoupanca(numero, agencia, tipo, titular, saldo, aniversario));
-                    //         break; 
-                    // }
-                }
-                else
+                do
                 {
-                    console.log("O produto número: " + numero + " não foi encontrado!");
-                }
+                    console.log("\n\nATUALIZAR PRODUTO CADASTRADO\n\n");
+                        console.log("Digite o número do produto: ")
+                        numero = readlinesync.questionInt("");
+
+                        let produto = produtos.buscarnoArray(numero);
+
+                        if (produto != null)
+                        {
+                        try{
+                        console.log("Digite o nome do produto: ");
+                        nome = readlinesync.question("");
+                        validarTexto(nome);
+                        } catch (error) {
+                            console.error("Erro: " + error);
+                            console.log("Por favor, digite um nome com mais de 4 caracteres:");
+                            nome = readlinesync.question("")
+                            try { 
+                            validarTexto(nome);
+                            } catch (novoErro) {
+                                console.log("Ainda inválido. Encerrando...");
+                                return;
+                            }
+                        }
+
+                        try{
+                        console.log("Digite a descrição do produto: ");
+                        descricao = readlinesync.question("");
+                        validarTexto(descricao);
+                        } catch (error) {
+                            console.error("Erro: " + error);
+                            console.log("Por favor, digite uma descrição com mais de 4 caracteres: ");
+                            descricao = readlinesync.question("")
+                            try { 
+                            validarTexto(descricao);
+                            } catch (novoErro) {
+                                console.log("Ainda inválido. Encerrando...");
+                                return;
+                            }
+                        }
+
+                        console.log("Selecione a categoria do produto: ");
+                        categoria = readlinesync.keyInSelect(tiposProdutos, "", {cancel: false}) +1;
+
+                        console.log("Selecione a cor do produto: ");
+                        cor = readlinesync.keyInSelect(coresProdutos, "", {cancel: false}) +1;
+
+                        console.log("Digite o preço do produto: ");
+                        preco = readlinesync.questionFloat("");
+
+                        console.log("Digite a quantidade disponível no estoque: ");
+                        estoque = readlinesync.questionInt("");
+
+                        switch (categoria)
+                        {
+                            case 1:
+                                console.log("Selecione o tipo de fone:");
+                                tipo = readlinesync.keyInSelect(tiposFones, "", {cancel: false}) +1;
+                                console.log("O produto tem fio?");
+                                fio = readlinesync.keyInYNStrict();
+                                console.log("O produto tem estojo?");
+                                estojo = readlinesync.keyInYNStrict();
+                                produtos.atualizar(
+                                    new ProdutosFones(numero, nome, descricao, categoria, cor, estojo, fio, tipo, preco, estoque));
+                                break;
+                            case 2:
+                                console.log("Selecione o tipo de fone:");
+                                tamanho = readlinesync.keyInSelect(tiposCaixas, "", {cancel: false}) +1;
+                                produtos.atualizar(
+                                    new ProdutosCaixas(numero, nome, descricao, categoria, cor, tamanho, preco, estoque));
+                                break;                      
+                        }
+                        console.log ("\nDeseja atualizar outro produto?")
+                        loop = readlinesync.keyInYNStrict()
+                    }
+                    else
+                    {
+                        console.log("O produto número: " + numero + " não foi encontrado!");
+                        console.log ("\nDeseja tentar novamente?")
+                        loop = readlinesync.keyInYNStrict()
+                    }                
+            } while (loop == true)
 
                 keyPress();
                 break;
             case 5:
                 console.log("\n\nDELETAR PRODUTO CADASTRADO\n\n");
-
+                do
+                {
                     console.log("Digite o número do produto: ");
                     numero = readlinesync.questionInt("");
                     produtos.deletar(numero);
-
+                    loop = readlinesync.keyInYNStrict()
+            } while (loop == true)
                 keyPress();
                 break;
+                
             // case 6:
             //     console.log(colors.fg.whitestrong,
             //         "\n\nSaque\n\n", colors.reset);
@@ -223,6 +305,12 @@ export function sobre(): void
 function keyPress(): void {
     console.log("\nPressione enter para continuar...");
     readlinesync.prompt();
+}
+
+function validarTexto(texto: string): void
+{
+    if (texto.length < 5) {
+        throw new Error("Texto insuficiente para cadastrar produto.") }
 }
 
 main();

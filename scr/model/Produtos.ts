@@ -103,6 +103,8 @@ export abstract class Produtos {
             case 2:
                 categoria = "Caixa de Som";
                 break;
+            default:
+                console.log("")
         }
 
         let cor: string = "";
