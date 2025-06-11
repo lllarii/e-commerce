@@ -2,6 +2,7 @@ import readlinesync = require ("readline-sync");
 import { ProdutosFones } from "./scr/model/ProdutosFones";
 import { ProdutosCaixas } from "./scr/model/ProdutosCaixas";
 import { ProdutosController } from "./scr/controller/ProdutosController";
+import { TextoIncompleto } from "./scr/util/exceptions/TextoIncompleto";
 
 export function main ()
 {
@@ -27,9 +28,9 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
         console.log("            3 - Buscar produto por número            ");
         console.log("            4 - Atualizar produto cadastrado         ");
         console.log("            5 - Apagar produto cadastrado            ");
-        // console.log("            6 - Sacar                                ");
-        // console.log("            7 - Depositar                            ");
-        // console.log("            8 - Transferir valores entre Contas      ");
+        console.log("            6 - Comprar                              ");
+        console.log("            7 - Favoritar                            ");
+        console.log("            8 - Ver lista de favoritos               ");
         console.log("            0 - Sair                                 ");
         console.log("                                                     ");
         console.log("-----------------------------------------------------");
@@ -54,35 +55,47 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
                 {
                     console.log("\n\nCADASTRO DE PRODUTOS\n\n");
                     
-                    try{
-                    console.log("Digite o nome do produto: ");
-                    nome = readlinesync.question("");
-                    validarTexto(nome);
-                    } catch (error) {
+                    try
+                    {
+                        console.log("Digite o nome do produto: ");
+                        nome = readlinesync.question("");
+                        validarTexto(nome);
+                    } 
+                    catch (error) 
+                    {
                         console.error("Erro: " + error);
                         console.log("Por favor, digite um nome com mais de 4 caracteres:");
-                        nome = readlinesync.question("")
-                        try { 
-                        validarTexto(nome);
-                        } catch (novoErro) {
+                        nome = readlinesync.question("");
+                        try 
+                        { 
+                            validarTexto(nome);
+                        } 
+                        catch (novoErro) 
+                        {
                             console.log("Ainda inválido. Encerrando...");
-                            return;
+                            main()
                         }
                     }
 
-                    try{
-                    console.log("Digite a descrição do produto: ");
-                    descricao = readlinesync.question("");
-                    validarTexto(descricao);
-                    } catch (error) {
+                    try
+                    {
+                        console.log("Digite a descrição do produto: ");
+                        descricao = readlinesync.question("");
+                        validarTexto(descricao);
+                    } 
+                    catch (error) 
+                    {
                         console.error("Erro: " + error);
                         console.log("Por favor, digite uma descrição com mais de 4 caracteres: ");
-                        descricao = readlinesync.question("")
-                        try { 
-                        validarTexto(descricao);
-                        } catch (novoErro) {
+                        descricao = readlinesync.question("");
+                        try 
+                        { 
+                            validarTexto(descricao);
+                        } 
+                        catch (novoErro) 
+                        {
                             console.log("Ainda inválido. Encerrando...");
-                            return;
+                            main();
                         }
                     }
 
@@ -117,18 +130,21 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
                                 new ProdutosCaixas(produtos.gerarNumero(), nome, descricao, categoria, cor, tamanho, preco, estoque));
                             break;                      
                     }
+
                     console.log ("\nDeseja cadastrar um novo produto?");
                     loop = readlinesync.keyInYNStrict();
 
-                } while (loop == true)
+                } while (loop == true);
 
                 keyPress();
                 break;
+
             case 2:
                 console.log("\n\nCONSULTA DE PRODUTOS CADASTRADOS\n\n");
                 produtos.listarTodos();
                 keyPress();
                 break;
+
             case 3:
                 console.log("\n\nBUSCAR PRODUTO POR NÚMERO\n\n");
                 do
@@ -136,51 +152,64 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
                     console.log("Digite o número do produto: ");
                     numero = readlinesync.questionInt("");
                     produtos.procurarPorNumero(numero);
-                    loop = readlinesync.keyInYNStrict()
+                    loop = readlinesync.keyInYNStrict();
                 } while (loop == true)
 
                 keyPress();
                 break;
+
             case 4:
                 do
                 {
                     console.log("\n\nATUALIZAR PRODUTO CADASTRADO\n\n");
-                        console.log("Digite o número do produto: ")
+                        console.log("Digite o número do produto: ");
                         numero = readlinesync.questionInt("");
 
                         let produto = produtos.buscarnoArray(numero);
 
                         if (produto != null)
                         {
-                        try{
-                        console.log("Digite o nome do produto: ");
-                        nome = readlinesync.question("");
-                        validarTexto(nome);
-                        } catch (error) {
+                        try
+                        {
+                            console.log("Digite o nome do produto: ");
+                            nome = readlinesync.question("");
+                            validarTexto(nome);
+                        } 
+                        catch (error) 
+                        {
                             console.error("Erro: " + error);
                             console.log("Por favor, digite um nome com mais de 4 caracteres:");
-                            nome = readlinesync.question("")
-                            try { 
-                            validarTexto(nome);
-                            } catch (novoErro) {
+                            nome = readlinesync.question("");
+                            try
+                            { 
+                                validarTexto(nome);
+                            } 
+                            catch (novoErro) 
+                            {
                                 console.log("Ainda inválido. Encerrando...");
-                                return;
+                                main();
                             }
                         }
 
-                        try{
-                        console.log("Digite a descrição do produto: ");
-                        descricao = readlinesync.question("");
-                        validarTexto(descricao);
-                        } catch (error) {
+                        try
+                        {
+                            console.log("Digite a descrição do produto: ");
+                            descricao = readlinesync.question("");
+                            validarTexto(descricao);
+                        }
+                        catch (error)
+                        {
                             console.error("Erro: " + error);
                             console.log("Por favor, digite uma descrição com mais de 4 caracteres: ");
-                            descricao = readlinesync.question("")
-                            try { 
-                            validarTexto(descricao);
-                            } catch (novoErro) {
+                            descricao = readlinesync.question("");
+                            try
+                            { 
+                                validarTexto(descricao);
+                            } 
+                            catch (novoErro) 
+                            {
                                 console.log("Ainda inválido. Encerrando...");
-                                return;
+                                main();
                             }
                         }
 
@@ -215,8 +244,9 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
                                     new ProdutosCaixas(numero, nome, descricao, categoria, cor, tamanho, preco, estoque));
                                 break;                      
                         }
-                        console.log ("\nDeseja atualizar outro produto?")
-                        loop = readlinesync.keyInYNStrict()
+
+                        console.log ("\nDeseja atualizar outro produto?");
+                        loop = readlinesync.keyInYNStrict();
                     }
                     else
                     {
@@ -228,6 +258,7 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
 
                 keyPress();
                 break;
+
             case 5:
                 console.log("\n\nDELETAR PRODUTO CADASTRADO\n\n");
                 do
@@ -235,56 +266,141 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
                     console.log("Digite o número do produto: ");
                     numero = readlinesync.questionInt("");
                     produtos.deletar(numero);
-                    loop = readlinesync.keyInYNStrict()
-            } while (loop == true)
+                    loop = readlinesync.keyInYNStrict();
+                } while (loop == true);
+
                 keyPress();
                 break;
                 
-            // case 6:
-            //     console.log(colors.fg.whitestrong,
-            //         "\n\nSaque\n\n", colors.reset);
+            case 6:
+                console.log("\n\nCOMPRAR\n\n");
+                console.log("\nCatálogo de produtos:");
+                produtos.listarTodos();
+                if ( produtos.lista == true )
+                    {                   
+                        do
+                        {
+                            let pagamento, quantidade, desconto, frete: number;
+                            const metodos = ["Pix", "Cartão de Crédito", "Cartão de Débito", "Boleto"];
 
-            //     console.log("Digite o número da conta: ");
-            //     numero = readlinesync.questionInt("");
+                            console.log("\n\nDigite o ID do produto que deseja comprar: ");
+                            numero = readlinesync.questionInt();
 
-            //     console.log("\nDigite o valor do saque (R$): ");
-            //     valor = readlinesync.questionFloat("");
+                            let ok = produtos.buscarnoArray(numero);
+                            if (ok != null)
+                            {
+                                console.log("\nDigite a quantidade que será comprada: ")
+                                quantidade = readlinesync.questionInt();
 
-            //     contas.sacar(numero, valor);
+                                let verEstoque = produtos.quantProduto(numero);
 
-            //     keyPress();
-            //     break;
-            // case 7:
-            //     console.log(colors.fg.whitestrong,
-            //         "\n\nDepósito\n\n", colors.reset);
+                                if (quantidade <= verEstoque)
+                                {
+                                    console.log("\nDigite o método de pagamento: ");
+                                    pagamento = readlinesync.keyInSelect(metodos, "", {cancel: false}) +1;
+                                    let _pagamento: string = "";
+
+                                    switch (pagamento) 
+                                    {
+                                        case 1:
+                                            _pagamento = "Pix";
+                                            break;
+                                        case 2:
+                                            _pagamento = "Cartão de Crédito";
+                                            break;
+                                        case 3:
+                                            _pagamento = "Cartão de Débito";
+                                            break;
+                                        case 4:
+                                            _pagamento = "Boleto";
+                                            break;
+                                    }
+
+                                    console.log("\nTem cupom de desconto?");
+                                    let resposta = readlinesync.keyInYNStrict();
+                                    if (resposta == true)
+                                    {
+                                        console.log("\nDigite o valor do desconto");
+                                        desconto = readlinesync.questionFloat();
+                                    }
+                                    else
+                                    {
+                                        desconto = 0
+                                    }
+
+                                    console.log("\nDigite o endereço de entrega:");
+                                    let endereco = readlinesync.question("");
+
+                                    console.log("\nDigite o valor do frete: ");
+                                    frete = readlinesync.questionFloat();
+
+                                    let compras = produtos.comprar(numero, quantidade, desconto, frete);
+
+                                    console.log("\n\n ** Resumo da Compra ** \n");
+                                    console.log("Produto: " + compras.nome);
+                                    console.log("Quantidade: " + quantidade);
+                                    console.log("Método de pagamento: " + _pagamento);
+                                    console.log("Endereço de entrega: " + endereco);
+                                    console.log("Valor da compra: " + new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL', }).format(compras.valor));
+
+                                    console.log("\nDeseja fazer uma nova compra?")
+                                    loop = readlinesync.keyInYNStrict();
+                                }
+                                else
+                                {
+                                    console.log("\nA quantidade disponível no estoque não é suficiente para atender ao pedido.");
+                                    console.log("Por favor, revise a quantidade e tente novamente.");
+                                    console.log("Encerrando esta operação...");
+                                    loop = false;
+                                }
+                            }
+                            else
+                            {
+                                console.log("\nO produto correspondente ao ID " + numero + " não foi encontrado!");
+                                console.log ("\nTente novamente com um número válido.")
+                                loop = false
+                            }
+
+                        } while(loop == true);
+                    }
+                    else
+                    {
+                        console.log("Assim, não é possível comprar no momento.");
+                    }
+
+                keyPress();
+                break;
+
+            case 7:
+                console.log("\n\nADICIONAR AOS FAVORITOS\n\n");
+                console.log("\nCatálogo de produtos:");
+                produtos.listarTodos();
+                if ( produtos.lista == true )
+                    {              
+                        do
+                        {
+                            console.log("\nDigite o ID do produto para adicioná-lo aos seus favoritos:");
+                            numero = readlinesync.questionInt("");
+
+                            produtos.favoritar(numero);
+
+                            loop = readlinesync.keyInYNStrict();
+                        } while(loop == true);
+                    }
+                    else
+                    {
+                    console.log("Assim, não é possível adicionar aos favoritos no momento.");
+                    }
                 
-            //     console.log("Digite o número da conta: ");
-            //     numero = readlinesync.questionInt("");
+                keyPress();
+                break;
 
-            //     console.log("\nDigite o valor do depósito (R$): ");
-            //     valor = readlinesync.questionFloat("");
+            case 8:
+            console.log("\n\nVER PRODUTOS FAVORITOS\n\n");
+            produtos.todosFavoritos();
+                keyPress();
+                break;
 
-            //     contas.depositar(numero, valor);
-
-            //     keyPress();
-            //     break;
-            // case 8:
-            //     console.log(colors.fg.whitestrong,
-            //         "\n\nTransferência entre Contas\n\n", colors.reset);
-
-            //     console.log("Digite o número da conta de origem: ");
-            //     numero = readlinesync.questionInt("");
-
-            //     console.log("Digite o número da conta de destino: ");
-            //     numeroDestino = readlinesync.questionInt("");
-
-            //     console.log("\n Digite o valor do depósito (R$): ");
-            //     valor = readlinesync.questionFloat("");
-
-            //     contas.transferir(numero, numeroDestino, valor);
-                
-            //     keyPress();
-            //     break;
             default:
                 console.log("\nDigite uma opção existente!\n");
                 keyPress();
@@ -295,7 +411,7 @@ const tiposCaixas = ['Pequena', 'Média', 'Grande'];
 
 export function sobre(): void 
 {
-    console.log("\n---------------------------------------------------------");
+    console.log("\n----------------------------------------------------------");
     console.log("Projeto Desenvolvido por: Larissa Teixeira");
     console.log("Estudante de Desenvolvimento FullStack | Generation Brasil");
     console.log("https://github.com/lllarii");
@@ -310,7 +426,7 @@ function keyPress(): void {
 function validarTexto(texto: string): void
 {
     if (texto.length < 5) {
-        throw new Error("Texto insuficiente para cadastrar produto.") }
+        throw new TextoIncompleto("Texto insuficiente para cadastrar produto.") }
 }
 
 main();

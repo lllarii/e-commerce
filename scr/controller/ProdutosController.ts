@@ -1,12 +1,12 @@
 import { Produtos } from "../model/Produtos";
-import readlinesync = require ("readline-sync");
 import { ProdutosRepository } from "../repository/ProdutosRepository";
-let loop: boolean
 
 export class ProdutosController implements ProdutosRepository
 {
     private listaProdutos: Array<Produtos> = new Array<Produtos>();
+    private produtosFavoritos: Set<Produtos> = new Set<Produtos>();
     numero: number = 0;
+    lista: boolean = true
     
     procurarPorNumero(numero: number): void {
         let buscaProduto = this.buscarnoArray(numero);
@@ -31,6 +31,11 @@ export class ProdutosController implements ProdutosRepository
         if (this.listaProdutos.length == 0)
                 {
                     console.log("Não há produtos cadastrados.")
+                    this.lista = false
+                }
+                else
+                {
+                    this.lista = true
                 }
     }
     cadastrar(produto: Produtos): void {
@@ -55,64 +60,62 @@ export class ProdutosController implements ProdutosRepository
     }
 
     deletar(numero: number): void {
-            let buscaConta = this.buscarnoArray(numero);
+        let buscaProduto = this.buscarnoArray(numero);
 
-            if(buscaConta != null)
+        if(buscaProduto != null)
+        {
+            this.listaProdutos.splice(this.listaProdutos.indexOf(buscaProduto), 1);
+            console.log("\nO produto correspondente ao número " + numero + " foi excluído com sucesso!");
+            console.log ("\nDeseja deletar outro produto?")
+        }
+        else
+        {
+            console.log("\nO produto correspondente ao número " + numero + " não foi encontrado!");
+            console.log ("\nDeseja tentar novamente?")
+        }
+    }
+    
+    comprar(numero: number, quantidade: number, desconto: number, frete: number): {nome: string, valor: number}
+    {
+        let verEstoque = this.quantProduto(numero);
+        let nome = this.nomeProduto(numero);
+        let preco = this.precoProduto(numero);
+        let estoque = verEstoque - quantidade
+        this.atualizarEstoque(numero, estoque);
+        let valor = (preco*quantidade) + frete - desconto
+        console.log("\nA compra foi realizada com sucesso!");
+        return {nome, valor}
+    }
+
+	favoritar(numero: number): void
+    {
+        let buscaProduto = this.buscarnoArray(numero);
+        
+        if (buscaProduto != null)
+        {
+            let produto = buscaProduto;
+            this.produtosFavoritos.add(produto);
+            console.log("\nO produto foi adicionado aos favoritos!");
+            console.log("Deseja adicionar um novo produto à lista?")
+        }
+        else
+        {
+            console.log("\nO produto correspondente ao número " + numero + " não foi encontrado!");
+            console.log("Deseja tentar novamente?")
+        }
+    }
+
+    todosFavoritos(): void {
+        for (let produto of this.produtosFavoritos)
+        {
+            produto.visualizar();
+        }
+
+        if (this.produtosFavoritos.size == 0)
             {
-                this.listaProdutos.splice(this.listaProdutos.indexOf(buscaConta), 1);
-                console.log("\nO produto correspondente ao número " + numero + " foi excluído com sucesso!");
-                console.log ("\nDeseja deletar outro produto?")
-            }
-            else
-            {
-                console.log("\nO produto correspondente ao número " + numero + " não foi encontrado!");
-                console.log ("\nDeseja tentar novamente?")
+                console.log("Não há produtos entre os favoritos.")
             }
     }
-    // sacar(numero: number, valor: number): void {
-    //     let conta = this.buscarnoArray(numero);
-
-    //     if (conta != null)
-    //     {
-    //         if(conta.sacar(valor) == true)
-    //         {
-    //             console.log(colors.fg.greenstrong, `\nO saque na conta número: ${numero} foi efetuado com sucesso`, colors.reset);
-    //         }
-    //     }
-    //     else{
-    //         console.log(colors.fg.redstrong, `\nA conta número ${numero} não foi encontrada!`, colors.reset);
-    //     }
-    // }
-    // depositar(numero: number, valor: number): void {
-    //     let conta = this.buscarnoArray(numero);
-
-    //     if (conta != null)
-    //     {
-    //         conta.depositar(valor);
-    //         console.log(colors.fg.greenstrong, `\nO depósito na conta número: ${numero} foi efetuado com sucesso`, colors.reset);
-    //     }
-    //     else
-    //     {
-    //         console.log(colors.fg.redstrong, `\nA conta número ${numero} não foi encontrada!`, colors.reset);
-    //     }
-    // }
-    // transferir(numeroOrigem: number, numeroDestino: number, valor: number): void {
-    //     let contaOrigem = this.buscarnoArray(numeroOrigem);
-    //     let contaDestino = this.buscarnoArray(numeroDestino);
-
-    //     if (contaOrigem != null && contaDestino != null)
-    //     {
-    //         if(contaOrigem.sacar(valor) == true)
-    //         {
-    //             contaDestino.depositar(valor);
-    //             console.log(colors.fg.greenstrong, `\n A transferência da conta número: ${numeroOrigem} para a conta número: ${numeroDestino} foi efetuada com sucesso`, colors.reset);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         console.log(colors.fg.redstrong,`\nA conta número: ${numeroOrigem} e/ou a conta número: ${numeroDestino} não foram encontradas!`, colors.reset);
-    //     }
-    // }
     
     //GERAR NÚMERO Do PRODUTO
     public gerarNumero(): number 
@@ -129,5 +132,54 @@ export class ProdutosController implements ProdutosRepository
                 return produto;
         }
         return null;
+    }
+
+    public nomeProduto(numero: number): string 
+    {
+        let nome: string = "";
+        for (let produto of this.listaProdutos)
+        {
+            if (produto.numero === numero)
+            {               
+                nome = produto.nome                
+            }
+        }
+        return nome;
+    }
+
+    public precoProduto(numero: number): number
+    {
+        let preco: number = 0;
+        for (let produto of this.listaProdutos)
+        {
+            if (produto.numero === numero)
+            {               
+                preco = produto.preco               
+            }
+        }
+        return preco;
+    }
+
+    //verificar quantidade disponível em estoque
+    public quantProduto(numero: number): number
+    {
+        let quant: number = 0;
+        for (let produto of this.listaProdutos)
+        {
+            if (produto.numero === numero)
+            {               
+                quant = produto.estoque               
+            }
+        }
+        return quant;
+    }
+
+    atualizarEstoque(numero: number, estoque: number): void 
+    {
+        let buscaProduto = this.buscarnoArray(numero);
+        if (buscaProduto != null)
+        {
+            buscaProduto.estoque = estoque
+        }
     }
 }

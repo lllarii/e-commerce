@@ -75,21 +75,6 @@ export abstract class Produtos {
         this._estoque = estoque;
     }
 
-    // public sacar(valor: number): boolean {
-
-    //     if (this._saldo < valor) {
-    //         console.log("\n Saldo Insuficiente!");
-    //         return false;
-    //     }
-
-    //     this._saldo = this._saldo - valor;
-    //     return true;
-    // }
-
-    // public depositar(valor: number): void {
-    //     this._saldo = this._saldo + valor;
-    // }
-
     public visualizar(): void 
     {
 
@@ -103,8 +88,6 @@ export abstract class Produtos {
             case 2:
                 categoria = "Caixa de Som";
                 break;
-            default:
-                console.log("")
         }
 
         let cor: string = "";
@@ -137,7 +120,5 @@ export abstract class Produtos {
         console.log("Cor: " + cor);
         console.log("Preço: " + new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL', }).format(this._preco));
         console.log("Quantidade disponível em estoque: " + this._estoque);
-
     }
-
 }
